@@ -1,0 +1,54 @@
+
+You are an expert academic assistant. Your task is to provide a comprehensive solution for the following university-level assignment.
+
+Please analyze the assignment description and any supplementary content (files, transcripts) carefully and generate a complete response.
+
+--- ASSIGNMENT DETAILS ---
+Assignment Name: T1.b: Fighting Slop with Slop
+Description (cleaned):
+In T1.a, we asked you to try to quickly generate new educational worksheets in the style of a single traditional example worksheet while adapting the worksheet to a target domain you didn't know yourself. With more practice, we might get good at doing things like that with better and better quality in the future, but we were in a rush. The T1.b assignment here explores another kind of rush that is enabled, maybe even triggered, by access to GenAI and its use in generating traditional educational materials. Find the list of worksheet packets created by your peers here: https://drive.google.com/drive/folders/1Fo4C4dxiIfqmeLoI8lWvRsr6R5fHX-Lp?usp=sharing
+In T1.a, we asked you to try to quickly generate new educational worksheets in the style of a single traditional example worksheet while adapting the worksheet to a target domain you didn't know yourself. With more practice, we might get good at doing things like that with better and better quality in the future, but we were in a rush.
+The T1.b assignment here explores another kind of rush that is enabled, maybe even triggered, by access to GenAI and its use in generating traditional educational materials.
+Find the list of worksheet packets created by your peers here: https://drive.google.com/drive/folders/1Fo4C4dxiIfqmeLoI8lWvRsr6R5fHX-Lp?usp=sharing
+Your goal is to complete as many worksheets as you can while producing as accurate as possible responses while you do it. Even though it might be tempting to take the time and have fun exploring the creative work of your peers, we want you to use GenAI to push through quickly. Take as many shortcuts with GenAI that you can, but do make sure to be authentically lazy: If some task is too hard to automate with GenAI, you are permitted to do a little bit of natural human thinking to skip past the automation obstacle.
+Your goal is to complete as many worksheets as you can while producing as accurate as possible responses while you do it. Even though it might be tempting to take the time and have fun exploring the creative work of your peers, we want you to use GenAI to push through quickly. Take as many shortcuts with GenAI that you can, but do make sure to be authentically lazy: If some task is too hard to automate with GenAI, you are permitted to do a little bit of natural human thinking to skip past the automation obstacle.
+Use this new folder to organize your responses with filenames like "{Name} - Responses" and "{Name} - Process": https://drive.google.com/drive/folders/15cISeWh622xw68zk8MzkONjxNUMM76x2?usp=drive_link
+Suggested format for responses:
+# {name of student you are responding to} Word search response: For each concept, tell us the source language translation that occurs somewhere in the target language sentence. Also identify the row, column, and orientation (across or down) of the word in the word search. Word search commentary: We you able to find every word in the word search? If not, do you think it is your fault (you didn't look hard enough) or the fault of the assignment designer (the puzzle is broken)? Reading quiz response: For each item on the quiz, write the question and the correct answer including the letter identifier for the correct answer (A/B/C/D). Reading quiz commentary: Did your answers agree with the answers given in the answer key? If not, who is to blame (as above)?
+Word search response: For each concept, tell us the source language translation that occurs somewhere in the target language sentence. Also identify the row, column, and orientation (across or down) of the word in the word search.
+Word search commentary: We you able to find every word in the word search? If not, do you think it is your fault (you didn't look hard enough) or the fault of the assignment designer (the puzzle is broken)?
+Reading quiz response: For each item on the quiz, write the question and the correct answer including the letter identifier for the correct answer (A/B/C/D).
+Reading quiz commentary: Did your answers agree with the answers given in the answer key? If not, who is to blame (as above)?
+Try to complete at least 5 worksheet packets. If possible, make random selections so that we see some variety in which packets are attempted across the various students in this course. After you are done, give us some notes on your process of completing these quickly in your Process document. Try to write the kind of information that a peer who knows less about GenAI than you could use to rapidly defeat similar assignments like this in the future. For example, you might paste the raw prompt you are using and describe which blocks of text you would copy-paste at which time. If some of the worksheet packets put up more of a challenge to automation than aothers, feel free to remark on that in your Process document as well.
+Try to complete at least 5 worksheet packets. If possible, make random selections so that we see some variety in which packets are attempted across the various students in this course.
+After you are done, give us some notes on your process of completing these quickly in your Process document. Try to write the kind of information that a peer who knows less about GenAI than you could use to rapidly defeat similar assignments like this in the future. For example, you might paste the raw prompt you are using and describe which blocks of text you would copy-paste at which time.
+If some of the worksheet packets put up more of a challenge to automation than aothers, feel free to remark on that in your Process document as well.
+--- END OF ASSIGNMENT DETAILS ---
+
+--- SUPPLEMENTARY CONTENT (Files & Transcripts) ---
+--- Content from File: 1748575101_1Fo4C4dxiIfqmeLoI8lWvRsr6R5fHX-Lp.html (from https://drive.google.com/drive/folders/1Fo4C4dxiIfqmeLoI8lWvRsr6R5fHX-Lp?usp=sharing) ---
+Sign in to continue to Google Drive
+Sign in to continue to Google Drive
+Sign in to continue to Google Drive
+Sign in to continue to Google Drive
+Sign in to continue to Google Drive
+Sign in to continue to Google Drive
+Sign in to continue to Google Drive
+Sign in
+to continue to Google Drive
+--- End Content from File: 1748575101_1Fo4C4dxiIfqmeLoI8lWvRsr6R5fHX-Lp.html (from https://drive.google.com/drive/folders/1Fo4C4dxiIfqmeLoI8lWvRsr6R5fHX-Lp?usp=sharing) ---
+
+--- Content from File: 1748575101_15cISeWh622xw68zk8MzkONjxNUMM76x2.html (from https://drive.google.com/drive/folders/15cISeWh622xw68zk8MzkONjxNUMM76x2?usp=drive_link) ---
+Sign in to continue to Google Drive
+Sign in to continue to Google Drive
+Sign in to continue to Google Drive
+Sign in to continue to Google Drive
+Sign in to continue to Google Drive
+Sign in to continue to Google Drive
+Sign in to continue to Google Drive
+Sign in
+to continue to Google Drive
+--- End Content from File: 1748575101_15cISeWh622xw68zk8MzkONjxNUMM76x2.html (from https://drive.google.com/drive/folders/15cISeWh622xw68zk8MzkONjxNUMM76x2?usp=drive_link) ---
+--- END OF SUPPLEMENTARY CONTENT ---
+
+Please provide your solution below:
