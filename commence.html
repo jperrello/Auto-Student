@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commence Button</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      min-width: 100vw;
+      background: #d00; /* bright red */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .center-btn {
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 1.2em 2.5em;
+      font-size: 1.5rem;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: background 0.2s, transform 0.1s;
+    }
+    .center-btn:active {
+      background: #333;
+      transform: scale(0.97);
+    }
+    @media (max-width: 600px) {
+      .center-btn {
+        font-size: 1.1rem;
+        padding: 1em 1.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="center-btn" id="commenceBtn">commence</button>
+  <div id="fadeText" style="opacity:0; transition:opacity 3s; position:absolute; left:0; right:0; margin:auto; text-align:center; top:55%; font-size:1.3rem; color:#fff; max-width:90vw; pointer-events:none;">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt?
+  </div>
+  <button id="circleBtn" style="opacity:0; transition:opacity 5s; position:absolute; left:0; right:0; margin:auto; top:70%; display:block; width:60px; height:60px; border-radius:50%; background:#111; border:none; cursor:pointer; pointer-events:none;"></button>
+  <script>
+    // Store questions in a JS array (could be loaded from a separate file if needed)
+    const questions = [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt?",
+      "Curabitur non nulla sit amet nisl tempus convallis quis ac lectus?",
+      "Quisque velit nisi, pretium ut lacinia in, elementum id enim?"
+    ];
+    let currentQuestion = 0;
+
+    const commenceBtn = document.getElementById('commenceBtn');
+    const fadeText = document.getElementById('fadeText');
+    const circleBtn = document.getElementById('circleBtn');
+
+    // Make circleBtn not focusable/clickable until fade-in is done
+    circleBtn.disabled = true;
+    circleBtn.style.pointerEvents = 'none';
+
+    function showQuestion(idx) {
+      // Fade out both text and button
+      fadeText.style.transition = 'opacity 0.5s';
+      circleBtn.style.transition = 'opacity 0.5s';
+      fadeText.style.opacity = 0;
+      circleBtn.style.opacity = 0;
+      circleBtn.disabled = true;
+      circleBtn.style.pointerEvents = 'none';
+      setTimeout(() => {
+        // Set new question text
+        fadeText.textContent = questions[idx];
+        // Fade in text
+        fadeText.style.transition = 'opacity 3s';
+        fadeText.style.opacity = 1;
+        setTimeout(() => {
+          // Fade in button
+          circleBtn.style.transition = 'opacity 5s';
+          circleBtn.style.opacity = 1;
+          // Enable button after 2s (while still fading in)
+          setTimeout(() => {
+            circleBtn.disabled = false;
+            circleBtn.style.pointerEvents = 'auto';
+          }, 2000); // 2s after button starts fading in
+        }, 3000); // 3s for text fade-in
+      }, 500); // 0.5s for fade out
+    }
+
+    commenceBtn.addEventListener('click', () => {
+      commenceBtn.style.display = 'none';
+      currentQuestion = 0;
+      fadeText.textContent = questions[0];
+      fadeText.style.transition = 'opacity 3s';
+      fadeText.style.opacity = 1;
+      setTimeout(() => {
+        circleBtn.style.transition = 'opacity 5s';
+        circleBtn.style.opacity = 1;
+        // Enable button after 2s (while still fading in)
+        setTimeout(() => {
+          circleBtn.disabled = false;
+          circleBtn.style.pointerEvents = 'auto';
+        }, 2000);
+      }, 3000); // 3s for text fade-in
+    });
+
+    circleBtn.addEventListener('click', () => {
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        showQuestion(currentQuestion);
+      } else {
+        // Fade out both at the end
+        fadeText.style.transition = 'opacity 0.5s';
+        circleBtn.style.transition = 'opacity 0.5s';
+        fadeText.style.opacity = 0;
+        circleBtn.style.opacity = 0;
+      }
+    });
+  </script>
+</body>
+</html>
