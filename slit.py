@@ -75,6 +75,19 @@ def init_session_state():
     # NEW: Track assignments per class
     if 'class_assignments' not in st.session_state:
         st.session_state.class_assignments = {}
+    if 'reflection_questions' not in st.session_state:
+        st.session_state.reflection_questions = []
+    if 'current_question_index' not in st.session_state:
+        st.session_state.current_question_index = 0
+    if 'show_reflection' not in st.session_state:
+        st.session_state.show_reflection = False
+    if 'processing_started' not in st.session_state:
+        st.session_state.processing_started = False
+    if 'show_reflection_questions' not in st.session_state:
+        st.session_state.show_reflection_questions = False
+    if 'reflection_error' not in st.session_state:
+        st.session_state.reflection_error = None
+
 # Activity callback handler
 def activity_callback(description: str):
     st.session_state.activity_description = description.replace('_', ' ')
@@ -176,22 +189,16 @@ def show_main_selection_view():
         # Update selected class if changed
         if st.session_state.selected_class != selected_class:
             st.session_state.selected_class = selected_class
-            st.session_state.selected_assignment = None  # Reset assignment selection
-            st.session_state.currentview = "loading_assignments"
-            st.rerun()
-        
-        # Fetch assignments if not already cached
-        if selected_class.id not in st.session_state.class_assignments:
-            st.session_state.current_view = "loading_assignments"
-            st.session_state.activity_description = f"Loading assignments for {selected_class.name}..."
-            st.rerun()
+            st.session_state.selected_assignment = None
+            if selected_class.id not in st.session_state.class_assignments:
+                st.session_state.current_view = "loading_assignments"
+                st.session_state.activity_description = f"Loading assignments for {selected_class.name}..."
+                st.rerun()
         
         if st.session_state.current_view == "main_selection":
+            # Get assignments for selected class
             assignments = st.session_state.class_assignments.get(selected_class.id, [])
 
-            # Get assignments for selected class
-            assignments = st.session_state.class_assignments[selected_class.id]
-        
         if not assignments:
             st.warning("No assignments found for this class.")
             return
@@ -214,16 +221,55 @@ def show_main_selection_view():
             
             # Process button
             if st.button("Process Assignment"):
+                st.session_state.show_reflection = True
+                st.session_state.current_question_index = 0
+                st.session_state.reflection_questions = []
+                asyncio.run(generate_questions())
+
+async def generate_questions():
+    try:
+        solver = AssignmentSolver(st.session_state.settings)
+        async with solver:
+            questions = await solver.generate_reflective_questions(
+                st.session_state.selected_class.name,
+                st.session_state.selected_assignment
+            )
+            st.session_state.reflection_questions = questions
+    except Exception as e:
+        st.error(f"Failed to generate reflection questions: {str(e)}")
+        st.session_state.show_reflection = False
+    finally:
+        st.rerun()
+
+
+def show_reflection_view():
+    st.title("Reflective Questions")
+    questions = st.session_state.reflection_questions
+    idx = st.session_state.current_question_index
+
+    # Current question
+    st.markdown(f"<h2 style='text-align: center;'>{questions[idx]}</h2>",
+               unsafe_allow_html=True)
+
+    # Progress and navigation
+    st.caption(f"Question {idx+1} of {len(questions)}")
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        if st.button("� Previous", disabled=idx==0):
+            st.session_state.current_question_index -= 1
+            st.rerun()
+    with col2:
+        if idx < len(questions) - 1:
+            if st.button("Next �"):
+                st.session_state.current_question_index += 1
+                st.rerun()
+        else:
+            if st.button("I've reflected. Proceed to generate"):
+                st.session_state.show_reflection = False
+                st.session_state.processing_started = False
                 st.session_state.current_view = "processing"
-                st.session_state.progress_tracker.reset()
-                # Set up progress tracking phases
-                total_downloads = len(st.session_state.selected_assignment.links) + \
-                                 len(st.session_state.selected_assignment.youtube_video_ids)
-                st.session_state.progress_tracker.set_phase("initialization", 1)
-                st.session_state.progress_tracker.set_phase("downloading", total_downloads)
-                st.session_state.progress_tracker.set_phase("processing", total_downloads)
-                st.session_state.progress_tracker.set_phase("ai_generation", 1)
-                asyncio.run(process_selected_assignment())
+                st.rerun()
+
 
 # NEW: View for loading assignments
 def show_loading_assignments_view():
@@ -249,6 +295,10 @@ def show_processing_view():
     if st.button("Cancel Processing", key="cancel_processing"):
         st.session_state.current_view = "main_selection"
         st.rerun()
+    if not st.session_state.processing_started and st.session_state.current_view == "processing":
+        asyncio.run(process_selected_assignment())
+        st.session_state.processing_started = True
+
 async def process_selected_assignment():
     st.session_state.results = await process_assignment(
         st.session_state.selected_assignment
@@ -302,9 +352,15 @@ def main():
     # View router
     if st.session_state.current_view == "loading":
         show_loading_view()
-    elif st.session_state.current_view == "loading_assignments":  # NEW view
+    elif st.session_state.current_view == "loading_assignments":
         show_loading_assignments_view()
-    elif st.session_state.current_view == "main_selection":  # Changed from class_selection
+    elif st.session_state.show_reflection:
+        if st.session_state.reflection_questions:
+            show_reflection_view()
+        else:
+            st.info("Generating reflection questions...")
+            st.spinner()
+    elif st.session_state.current_view == "main_selection":
         show_main_selection_view()
     elif st.session_state.current_view == "processing":
         show_processing_view()

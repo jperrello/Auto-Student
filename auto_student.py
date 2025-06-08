@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os
 import re
+import json
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -365,7 +366,7 @@ class AssignmentSolver:
         all_supplementary_content = "\n\n".join(supplementary_content_parts) if supplementary_content_parts else "[No supplementary content processed.]"
         prompt = f"""You are an expert academic assistant. Your task is to provide a comprehensive solution for the following university-level assignment.
 Please analyze the assignment description and any supplementary content (files, transcripts) carefully and generate a complete response.
-Only provide the answer to the question in a proper MLA essay format. Do not restate my question or offer a follow up question.
+Only provide the answer to the question in an appropriate format.  That means a proper MLA essay format for a question that wants an essay response, simple python code if the result is for a python notebook, or others as appropriate to the assignment's requirements. Do not restate my question or offer a follow up question.
 
 --- ASSIGNMENT DETAILS ---
 Assignment Name: {assignment.name}
@@ -417,12 +418,83 @@ Please provide your solution below:"""
             "assignment_details_text": f"{initial_details_text}\nGenerated prompt length: {len(prompt)}\nSupplementary content parts: {len(supplementary_content_parts)}"
         }
 
-    # Existing methods below remain unchanged:
-    # - _summarize_text()
-    # - _extract_links_yt_from_html()
-    # - _get_youtube_transcript()
-    # - _download_file()
-    # - _read_file_content()
-    # - generate_solution()
+    async def generate_reflective_questions(self, class_name, assignment):
+        system_prompt = f"""
+        You are an AI assistant specialized in educational psychology and ethical reflection.
+        Your task is to generate a series of reflective questions for a student who is considering using an
+        LLM (Large Language Model) or similar tool to complete a specific academic assignment.
+        The goal of these questions is to prompt the student to pause, think critically about their decision,
+        and consider the implications of using the tool versus completing the assignment themselves. The
+        questions are intended to be a 'speed bump' before accessing the cheating functionality.
+        The questions should be rooted in scientific and psychological principles, including:
+        - Consequences analysis (examining potential short-term benefits vs. long-term costs, risks, missed opportunities)
+        - Values clarification (connecting the action to personal values like integrity, learning, growth)
+        - Motivational Interviewing techniques (exploring ambivalence, reasons for considering the tool, and reasons for doing the work authentically)
+        - Cognitive Behavioral Therapy principles (considering thoughts and feelings associated with the decision and its outcomes)
+        - Principles of learning and skill development (what the assignment is *meant* to teach, what is lost by bypassing it)
+        Make the questions as relevant and specific as possible to the learning objectives and content of the assignment.
+        Output JSON format: {{"questions": ["Q1", "Q2", ...]}}
+        """
 
-# Remove CLI main function since we're using Streamlit GUI
+        user_prompt = f"""
+        Generate between 5 and 8 distinct questions to present to a student who is considering using an LLM to
+        solve the following homework assignment.  The tone of the questions should be neutral and reflective,
+        not accusatory or preachy.  Ensure questions are concise enough to be easily read on a web or mobile interface.
+
+        - CLASS: {class_name}
+        - ASSIGNMENT TYPE: {assignment.type if hasattr(assignment, 'type') else 'General Assignment'}
+        - DESCRIPTION: {assignment.description}
+        
+        Questions should:
+        - Be open-ended and thought-provoking
+        - Focus on learning consequences, ethics, and personal growth
+        - Avoid accusatory language
+        - Be concise (max 15 words each)
+        
+        Just to reiterate, the only output should be in JSON format: {{"questions": ["Q1", "Q2", ...]}}
+        """
+        #response = await self._call_ai_model(prompt)  # Your existing AI call method
+        response = await self.openai_client.chat.completions.create(
+            model=self.settings.SUMMARY_MODEL_NAME,
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=0.3,
+        )
+        try:
+            parsed = remove_think_tags(response.choices[0].message.content)
+            question_set = parsed.get("questions", [])
+            self._report_activity(f"Reflective_questions_successfully_generated_{len(question_set)}")
+            return question_set
+        except Exception as e:
+            self.logger.error(f"Error generating questions - couldn't process response {response}")
+        return None
+
+def remove_think_tags(response_text):
+    """
+    Removes <think>...</think> tags and other potential non-JSON prefixes/suffixes
+    while preserving valid JSON content
+    """
+    # Pattern to match <think> tags and their content
+    think_pattern = r"<think>.*?</think>"
+    
+    # Remove all think tags
+    cleaned = re.sub(think_pattern, "", response_text, flags=re.DOTALL)
+    
+    # Find the first valid JSON object in the response
+    json_candidates = re.findall(r"\{.*\}", cleaned, re.DOTALL)
+    
+    if json_candidates:
+        # Try parsing each candidate from longest to shortest
+        for candidate in sorted(json_candidates, key=len, reverse=True):
+            try:
+                return json.loads(candidate)
+            except json.JSONDecodeError:
+                continue
+    
+    # Fallback: Try parsing the entire cleaned text
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError:
+        return {"questions": ["Error: Could not parse AI response"]}
