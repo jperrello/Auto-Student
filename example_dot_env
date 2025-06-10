@@ -1,0 +1,6 @@
+CANVAS_API_KEY = "<key>"
+CANVAS_API_URL = "<url>"
+OPENAI_API_KEY = "<key>"
+OPENAI_API_BASE = "<url>"
+SUMMARY_MODEL_NAME = "<model name>"
+HW_MODEL_NAME = "<model name>"
