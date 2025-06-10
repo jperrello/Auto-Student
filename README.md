@@ -1,111 +1,61 @@
-﻿# Auto-Student
-The two files (auto_student.py and gui.py) are meant to help process Canvas assignments with some AI magic thrown in. Below is what each file does and the key functions they’ve got going on.
-What’s This All About?
-1. auto_student.py
+# Auto-Student
 
-This is where all the heavy lifting happens — scraping, downloading, summarizing, and talking to OpenAI’s API.
-Key Functions and Features:
+A comprehensive academic assignment automation tool that integrates with Canvas LMS and OpenAI to automatically process and generate solutions for university assignments.
 
-    AssignmentSolver Class:
-    The main worker. Handles:
+## Functionality (what it does)
 
-        Connecting to Canvas using your API key (test_canvas_connection).
+Auto-Student consists of two main components:
 
-        Fetching all assignments from a course (fetch_all_assignments).
+### 1. Core Engine (`auto_student.py`)
+- **Canvas Integration**: Automatically fetches courses and assignments from Canvas LMS
+- **Content Extraction**: Downloads and processes linked files (HTML, text, documents)
+- **YouTube Integration**: Extracts video IDs from assignments and fetches transcripts
+- **Intelligent Summarization**: Automatically summarizes long content for context
+- **AI-Powered Solutions**: Uses OpenAI models to generate comprehensive assignment answers
+- **Reflective Questions**: Generates ethical reflection prompts before processing assignments
 
-        Extracting links and YouTube video IDs from assignment descriptions (_extract_links_yt_from_html).
+### 2. Web Interface (`slit.py`)
+- **Streamlit Dashboard**: User-friendly web interface for assignment selection
+- **Progress Tracking**: Real-time progress monitoring during processing
+- **Ethical Safeguards**: Built-in plagiarism warnings and reflection questions
+- **File Management**: Download generated prompts and solutions
+- **Multi-Course Support**: Browse and select from multiple Canvas courses
 
-        Downloading files from links (_download_file).
+## Installation
 
-        Reading file content and summarizing text or HTML using OpenAI (_read_file_content, _summarize_text).
+Install all required dependencies:
 
-        Grabbing YouTube transcripts and summarizing them (_get_youtube_transcript).
+```bash
+pip install asyncio logging pathlib dataclasses typing urllib aiofiles aiohttp beautifulsoup4 canvasapi openai pydantic-settings youtube-transcript-api streamlit pyperclip
+```
 
-        Generating a full AI solution in MLA essay format using the assignment and all supplementary materials (generate_solution).
+## Configuration
 
-    Settings Class:
-    Loads API keys and other configuration from a .env file.
+Create a `.env` file in the project root with your API keys:
 
-    Helper Functions:
+```env
+CANVAS_API_KEY=your_canvas_api_key_here
+CANVAS_API_URL=https://your-institution.instructure.com
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_API_BASE=https:/your_openai_base
+SUMMARY_MODEL_NAME=google/gemma-3-4b-it
+HW_MODEL_NAME=google/gemma-3-27b-it
+```
 
-        _extract_youtube_video_id: Extracts YouTube video IDs from various link formats.
+## Usage
 
-        _report_activity: Keeps logs of what’s going on.
+1. Set up your `.env` file with the required API keys
+2. Run the Streamlit interface: `streamlit run slit.py`
+3. Select your course and assignment from the web interface
+4. Complete the reflective questions (ethical safeguard)
+5. Process the assignment and download the generated solution
 
-        _setup_logging: Sets up console logging.
+## Features
 
-        main_cli: (Commented out) Basic CLI runner that lets you test stuff without the GUI.
-
-2. gui.py
-
-This is the interface. Instead of running everything in the console, this lets you click around.
-Key Functions and Features:
-
-    App Class:
-    The main GUI app using customtkinter. Handles:
-
-        Async event loop so the UI doesn’t freeze while doing heavy stuff.
-
-        Displaying assignment list, progress bars, and AI results.
-
-        Download buttons to save the prompt or answer to your computer.
-
-        Plagiarism warnings (seriously, read them).
-
-        Activity updates so you can see what’s happening (downloading, processing, etc.).
-
-    Progress Tracking:
-    Uses a ProgressTracker class to keep track of each phase:
-
-        Initialization
-
-        Downloading
-
-        Processing
-
-        AI Generation
-
-    Event Handlers:
-
-        start_assignment_processing: Kicks off processing for a selected assignment.
-
-        show_results: Displays the AI-generated answer.
-
-        download_prompt and download_answer: Save the prompt or answer to a file.
-
-        refresh_assignments: Reloads assignments from Canvas.
-
-        activity_callback: Updates the GUI with activity descriptions.
-
-How to Run This
-
-First install everything with:
-
-pip install aiohttp aiofiles canvasapi openai youtube-transcript-api beautifulsoup4 customtkinter pydantic pydantic-settings
-
-Make sure you have a .env file with:
-
-OPENAI_API_KEY=<your_openai_api_key>
-
-CANVAS_API_KEY=<your_canvas_api_key>
-
-CANVAS_API_URL=https://canvas.yourschool.edu
-
-SUMMARY_MODEL_NAME=<low_tier_model>
-
-HW_MODEL_NAME=<good_model>
-
-COURSE_ID=<canvas_course>
-
-Then just run:
-
-python gui.py
-
-And you’re good to go.
-
-List of things to be done:
-Google Drive API
-Having this not be a python file but openui web tools (idk how to do this)
-better prompts
-processing different types of hw assignments (like code)
-Better Gui (ways of people to upload their API keys here?)
+- Automatic content extraction from assignment descriptions
+- YouTube transcript integration for video-based assignments  
+- Multi-format file processing (HTML, text, JSON, etc.)
+- AI-powered solution generation with context awareness
+- Built-in plagiarism warnings and ethical reflection prompts
+- Progress tracking and real-time status updates
+- File download capabilities for prompts and solutions
