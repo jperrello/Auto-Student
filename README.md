@@ -1,6 +1,6 @@
 # Auto-Student
 
-A comprehensive academic assignment automation tool that integrates with Canvas LMS and OpenAI to automatically process and generate solutions for university assignments.
+A comprehensive academic assignment automation tool that integrates with Canvas LMS and OpenAI to automatically process and generate solutions for university assignments. USE THE jcasper BRANCH.
 
 ## Functionality (what it does)
 
